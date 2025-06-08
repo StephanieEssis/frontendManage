@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import RoomList from '../components/Room/RoomList';
+import TestRooms from '../components/Room/TestRooms';
 import { categoryService } from '../services/categoryService';
 import './Rooms.css';
 
@@ -61,6 +62,7 @@ const Rooms = () => {
           ))}
         </div>
       </div>
+      <TestRooms />
       <RoomList categoryId={selectedCategory} />
     </div>
   );
