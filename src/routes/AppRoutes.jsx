@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 
 // Pages publiques
 import Home from '../pages/Home/Home';
@@ -8,6 +8,8 @@ import RoomList from '../pages/Room/RoomList';
 import RoomDetail from '../pages/Room/RoomDetail';
 import Login from '../pages/Auth/Login';
 import Register from '../pages/Auth/Register';
+import About from '../pages/About/About';
+import Contact from '../pages/Contact/Contact';
 import NotFound from '../pages/NotFound';
 
 // Pages protégées
@@ -44,6 +46,8 @@ const AppRoutes = () => {
       <Route path="/rooms/:id" element={<RoomDetail />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/contact" element={<Contact />} />
 
       {/* Routes protégées */}
       <Route

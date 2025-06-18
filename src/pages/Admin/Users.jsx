@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../services/api';
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
@@ -12,10 +12,7 @@ const AdminUsers = () => {
 
   const fetchUsers = async () => {
     try {
-      const token = JSON.parse(localStorage.getItem('user'))?.token;
-      const response = await axios.get('https://backendmanage-1.onrender.com/api/admin/users', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await api.get('/admin/users');
       setUsers(response.data);
       setLoading(false);
     } catch (err) {
@@ -28,10 +25,7 @@ const AdminUsers = () => {
   const handleDeleteUser = async (id) => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
       try {
-        const token = JSON.parse(localStorage.getItem('user'))?.token;
-        await axios.delete(`https://backendmanage-1.onrender.com/api/admin/users/${id}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        await api.delete(`/admin/users/${id}`);
         fetchUsers();
       } catch (err) {
         setErrorMessage('Erreur lors de la suppression de l\'utilisateur');

@@ -12,7 +12,7 @@ import {
   faUsers
 } from '@fortawesome/free-solid-svg-icons';
 import roomService from '../../services/roomService';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 
 const RoomDetail = () => {
   const { id } = useParams();
@@ -27,8 +27,12 @@ const RoomDetail = () => {
     const fetchRoom = async () => {
       try {
         setLoading(true);
+        if (!id) {
+          setError('ID de chambre manquant');
+          return;
+        }
         const response = await roomService.getRoomById(id);
-        setRoom(response.room);
+        setRoom(response);
       } catch (err) {
         setError('Erreur lors du chargement des détails de la chambre');
         console.error('Erreur:', err);
@@ -82,28 +86,30 @@ const RoomDetail = () => {
       <div className="mb-8">
         <div className="relative h-[400px] rounded-lg overflow-hidden">
           <img
-            src={room.images[selectedImage]}
+            src={room.images?.[selectedImage] || 'https://via.placeholder.com/800x400?text=Chambre'}
             alt={room.name}
             className="w-full h-full object-cover"
           />
         </div>
-        <div className="grid grid-cols-4 gap-4 mt-4">
-          {room.images.map((image, index) => (
-            <button
-              key={index}
-              onClick={() => setSelectedImage(index)}
-              className={`relative h-24 rounded-lg overflow-hidden ${
-                selectedImage === index ? 'ring-2 ring-blue-500' : ''
-              }`}
-            >
-              <img
-                src={image}
-                alt={`${room.name} - Image ${index + 1}`}
-                className="w-full h-full object-cover"
-              />
-            </button>
-          ))}
-        </div>
+        {room.images && room.images.length > 1 && (
+          <div className="grid grid-cols-4 gap-4 mt-4">
+            {room.images.map((image, index) => (
+              <button
+                key={index}
+                onClick={() => setSelectedImage(index)}
+                className={`relative h-24 rounded-lg overflow-hidden ${
+                  selectedImage === index ? 'ring-2 ring-blue-500' : ''
+                }`}
+              >
+                <img
+                  src={image}
+                  alt={`${room.name} - Image ${index + 1}`}
+                  className="w-full h-full object-cover"
+                />
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Informations de la chambre */}
@@ -161,7 +167,7 @@ const RoomDetail = () => {
         <div className="lg:col-span-1">
           <div className="bg-white p-6 rounded-lg shadow-md sticky top-8">
             <div className="text-3xl font-bold text-blue-600 mb-4">
-              {room.price}€ <span className="text-sm text-gray-500">/ nuit</span>
+              {room.price}FCFA <span className="text-sm text-gray-500">/ nuit</span>
             </div>
             <button
               onClick={handleBookNow}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../services/api';
 
 const AdminBookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -12,10 +12,7 @@ const AdminBookings = () => {
 
   const fetchBookings = async () => {
     try {
-      const token = JSON.parse(localStorage.getItem('user'))?.token;
-      const response = await axios.get('https://backendmanage-1.onrender.com/api/admin/bookings', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await api.get('/admin/bookings');
       setBookings(response.data);
       setLoading(false);
     } catch (err) {
@@ -27,11 +24,9 @@ const AdminBookings = () => {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      const token = JSON.parse(localStorage.getItem('user'))?.token;
-      await axios.put(
-        `https://backendmanage-1.onrender.com/api/admin/bookings/${id}/status`,
-        { status: newStatus },
-        { headers: { Authorization: `Bearer ${token}` } }
+      await api.put(
+        `/admin/bookings/${id}/status`,
+        { status: newStatus }
       );
       fetchBookings();
     } catch (err) {

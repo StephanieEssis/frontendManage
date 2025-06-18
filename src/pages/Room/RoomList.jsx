@@ -12,7 +12,7 @@ const RoomList = () => {
       try {
         setLoading(true);
         const response = await roomService.getRooms();
-        setRooms(response.rooms || []);
+        setRooms(Array.isArray(response) ? response : []);
       } catch (err) {
         setError('Erreur lors du chargement des chambres');
         console.error('Erreur:', err);
@@ -49,10 +49,10 @@ const RoomList = () => {
 
       {/* Liste des chambres */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {rooms.map((room) => (
-          <div key={room._id} className="bg-white rounded-lg shadow-md overflow-hidden">
+        {rooms.map((room, index) => (
+          <div key={room._id || room.id || index} className="bg-white rounded-lg shadow-md overflow-hidden">
             <img
-              src={room.images[0]}
+              src={room.images?.[0] || 'https://via.placeholder.com/400x300?text=Chambre'}
               alt={room.name}
               className="w-full h-48 object-cover"
             />
@@ -60,9 +60,9 @@ const RoomList = () => {
               <h2 className="text-xl font-semibold mb-2">{room.name}</h2>
               <p className="text-gray-600 mb-4">{room.description}</p>
               <div className="flex justify-between items-center">
-                <span className="text-2xl font-bold text-blue-600">{room.price}€</span>
+                <span className="text-2xl font-bold text-blue-600">{room.price}FCFA</span>
                 <Link
-                  to={`/rooms/${room._id}`}
+                  to={`/rooms/${room._id || room.id}`}
                   className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
                 >
                   Voir les détails

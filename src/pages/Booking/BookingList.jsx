@@ -113,7 +113,7 @@ const BookingList = () => {
                   </p>
                   <p>
                     <span className="font-medium">Personnes:</span>{' '}
-                    {booking.guests.adults} adulte(s) {booking.guests.children > 0 ? `et ${booking.guests.children} enfant(s)` : ''}
+                    {booking.guests?.adults || 0} adulte(s) {booking.guests?.children > 0 ? `et ${booking.guests.children} enfant(s)` : ''}
                   </p>
                 </div>
 

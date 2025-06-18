@@ -11,7 +11,7 @@ import {
   faSearch,
   faCalendarAlt
 } from '@fortawesome/free-solid-svg-icons';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 import roomService from '../../services/roomService';
 import bookingService from '../../services/bookingService';
 

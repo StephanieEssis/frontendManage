@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+import { useAuth } from '../../hooks/useAuth';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faHome, 
@@ -10,7 +10,9 @@ import {
   faSignOutAlt,
   faCalendarAlt,
   faBars,
-  faTimes
+  faTimes,
+  faInfoCircle,
+  faEnvelope
 } from '@fortawesome/free-solid-svg-icons';
 import './Header.css';
 
@@ -59,6 +61,20 @@ const Header = () => {
             >
               <FontAwesomeIcon icon={faBed} className="mr-2" />
               Chambres
+            </Link>
+            <Link
+              to="/about"
+              className="text-gray-700 hover:text-blue-600 transition-colors flex items-center"
+            >
+              <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
+              À Propos
+            </Link>
+            <Link
+              to="/contact"
+              className="text-gray-700 hover:text-blue-600 transition-colors flex items-center"
+            >
+              <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
+              Contact
             </Link>
             {user?.role === 'admin' && (
               <Link
@@ -153,6 +169,22 @@ const Header = () => {
               >
                 <FontAwesomeIcon icon={faBed} className="mr-2" />
                 Chambres
+              </Link>
+              <Link
+                to="/about"
+                className="text-gray-700 hover:text-blue-600 transition-colors flex items-center"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <FontAwesomeIcon icon={faInfoCircle} className="mr-2" />
+                À Propos
+              </Link>
+              <Link
+                to="/contact"
+                className="text-gray-700 hover:text-blue-600 transition-colors flex items-center"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <FontAwesomeIcon icon={faEnvelope} className="mr-2" />
+                Contact
               </Link>
               {user?.role === 'admin' && (
                 <Link
