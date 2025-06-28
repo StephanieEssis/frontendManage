@@ -4,7 +4,7 @@ import axios from 'axios';
 const AdminRooms = () => {
   const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [error, setError] = useState(null);
   const [editingRoom, setEditingRoom] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
@@ -21,16 +21,17 @@ const AdminRooms = () => {
 
   const fetchRooms = async () => {
     try {
-      const token = JSON.parse(localStorage.getItem('user'))?.token;
-      const response = await axios.get('https://backendmanage-1.onrender.com/api/rooms', {
+      setLoading(true);
+      const token = localStorage.getItem('token');
+      const response = await axios.get('https://backendmanage-7nxn.onrender.com/api/rooms', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setRooms(response.data);
       setLoading(false);
-    } catch (err) {
-      setErrorMessage('Erreur lors de la récupération des chambres');
+    } catch (error) {
+      console.error('Error fetching rooms:', error);
+      setError('Error fetching rooms');
       setLoading(false);
-      console.error('Erreur:', err);
     }
   };
 
@@ -45,29 +46,22 @@ const AdminRooms = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = JSON.parse(localStorage.getItem('user'))?.token;
+      const token = localStorage.getItem('token');
       if (editingRoom) {
-        await axios.put(`https://backendmanage-1.onrender.com/api/rooms/${editingRoom._id}`, formData, {
+        await axios.put(`https://backendmanage-7nxn.onrender.com/api/rooms/${editingRoom._id}`, formData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else {
-        await axios.post('https://backendmanage-1.onrender.com/api/rooms', formData, {
+        await axios.post('https://backendmanage-7nxn.onrender.com/api/rooms', formData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       }
       fetchRooms();
-      setFormData({
-        name: '',
-        description: '',
-        price: '',
-        capacity: '',
-        category: '',
-        amenities: []
-      });
+      setFormData({ name: '', description: '', price: '', capacity: '' });
       setEditingRoom(null);
-    } catch (err) {
-      setErrorMessage('Erreur lors de la sauvegarde de la chambre');
-      console.error('Erreur:', err);
+    } catch (error) {
+      console.error('Error saving room:', error);
+      setError('Error saving room');
     }
   };
 
@@ -84,22 +78,22 @@ const AdminRooms = () => {
   };
 
   const handleDelete = async (id) => {
-    if (window.confirm('Êtes-vous sûr de vouloir supprimer cette chambre ?')) {
+    if (window.confirm('Are you sure you want to delete this room?')) {
       try {
-        const token = JSON.parse(localStorage.getItem('user'))?.token;
-        await axios.delete(`https://backendmanage-1.onrender.com/api/rooms/${id}`, {
+        const token = localStorage.getItem('token');
+        await axios.delete(`https://backendmanage-7nxn.onrender.com/api/rooms/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         fetchRooms();
-      } catch (err) {
-        setErrorMessage('Erreur lors de la suppression de la chambre');
-        console.error('Erreur:', err);
+      } catch (error) {
+        console.error('Error deleting room:', error);
+        setError('Error deleting room');
       }
     }
   };
 
-  if (loading) return <div>Chargement...</div>;
-  if (errorMessage) return <div className="text-red-500">{errorMessage}</div>;
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="container mx-auto px-4 py-8">

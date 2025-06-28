@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../services/api';
+import axios from 'axios';
 
 const AdminBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchBookings();
@@ -12,31 +12,36 @@ const AdminBookings = () => {
 
   const fetchBookings = async () => {
     try {
-      const response = await api.get('/admin/bookings');
+      const token = localStorage.getItem('token');
+      const response = await axios.get('https://backendmanage-7nxn.onrender.com/api/admin/bookings', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setBookings(response.data);
       setLoading(false);
-    } catch (err) {
-      setErrorMessage('Erreur lors de la récupération des réservations');
+    } catch (error) {
+      console.error('Error fetching bookings:', error);
+      setError('Error fetching bookings');
       setLoading(false);
-      console.error('Erreur:', err);
     }
   };
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      await api.put(
-        `/admin/bookings/${id}/status`,
-        { status: newStatus }
+      const token = localStorage.getItem('token');
+      await axios.put(
+        `https://backendmanage-7nxn.onrender.com/api/admin/bookings/${id}/status`,
+        { status: newStatus },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       fetchBookings();
-    } catch (err) {
-      setErrorMessage('Erreur lors de la mise à jour du statut');
-      console.error('Erreur:', err);
+    } catch (error) {
+      console.error('Error updating booking status:', error);
+      setError('Error updating booking status');
     }
   };
 
-  if (loading) return <div>Chargement...</div>;
-  if (errorMessage) return <div className="text-red-500">{errorMessage}</div>;
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -67,7 +72,7 @@ const AdminBookings = () => {
                   {new Date(booking.checkIn).toLocaleDateString()} - {new Date(booking.checkOut).toLocaleDateString()}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {booking.totalPrice}FCFA
+                  {booking.totalPrice}€
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${

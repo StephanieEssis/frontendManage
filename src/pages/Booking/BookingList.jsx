@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCalendarAlt, faTimes } from '@fortawesome/free-solid-svg-icons';
 import bookingService from '../../services/bookingService';
 
 const BookingList = () => {
@@ -113,7 +115,7 @@ const BookingList = () => {
                   </p>
                   <p>
                     <span className="font-medium">Personnes:</span>{' '}
-                    {booking.guests?.adults || 0} adulte(s) {booking.guests?.children > 0 ? `et ${booking.guests.children} enfant(s)` : ''}
+                    {booking.guests.adults} adulte(s) {booking.guests.children > 0 ? `et ${booking.guests.children} enfant(s)` : ''}
                   </p>
                 </div>
 

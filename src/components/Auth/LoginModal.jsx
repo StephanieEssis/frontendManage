@@ -21,7 +21,7 @@ const LoginModal = ({ onClose, showRegister }) => {
     setIsLoading(true);
 
     try {
-      await authService.login(loginForm);
+      const data = await authService.login(loginForm);
       onClose();
       navigate('/booking');
     } catch (err) {

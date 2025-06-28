@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../services/api';
+import axios from 'axios';
 
 const AdminUsers = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     fetchUsers();
@@ -12,30 +12,37 @@ const AdminUsers = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await api.get('/admin/users');
+      setLoading(true);
+      const token = localStorage.getItem('token');
+      const response = await axios.get('https://backendmanage-7nxn.onrender.com/api/admin/users', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setUsers(response.data);
       setLoading(false);
-    } catch (err) {
-      setErrorMessage('Erreur lors de la récupération des utilisateurs');
+    } catch (error) {
+      console.error('Error fetching users:', error);
+      setError('Error fetching users');
       setLoading(false);
-      console.error('Erreur:', err);
     }
   };
 
-  const handleDeleteUser = async (id) => {
-    if (window.confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this user?')) {
       try {
-        await api.delete(`/admin/users/${id}`);
+        const token = localStorage.getItem('token');
+        await axios.delete(`https://backendmanage-7nxn.onrender.com/api/admin/users/${id}`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
         fetchUsers();
-      } catch (err) {
-        setErrorMessage('Erreur lors de la suppression de l\'utilisateur');
-        console.error('Erreur:', err);
+      } catch (error) {
+        console.error('Error deleting user:', error);
+        setError('Error deleting user');
       }
     }
   };
 
-  if (loading) return <div>Chargement...</div>;
-  if (errorMessage) return <div className="text-red-500">{errorMessage}</div>;
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -73,7 +80,7 @@ const AdminUsers = () => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   <button
-                    onClick={() => handleDeleteUser(user._id)}
+                    onClick={() => handleDelete(user._id)}
                     className="text-red-600 hover:text-red-900"
                   >
                     Supprimer
