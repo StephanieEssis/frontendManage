@@ -23,7 +23,7 @@ const AdminRooms = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await axios.get('https://backendmanage-7nxn.onrender.com/api/rooms', {
+      const response = await axios.get('https://backendmanage-2.onrender.com/api/rooms', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setRooms(response.data);
@@ -48,11 +48,11 @@ const AdminRooms = () => {
     try {
       const token = localStorage.getItem('token');
       if (editingRoom) {
-        await axios.put(`https://backendmanage-7nxn.onrender.com/api/rooms/${editingRoom._id}`, formData, {
+        await axios.put(`https://backendmanage-2.onrender.com/api/rooms/${editingRoom._id}`, formData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       } else {
-        await axios.post('https://backendmanage-7nxn.onrender.com/api/rooms', formData, {
+        await axios.post('https://backendmanage-2.onrender.com/api/rooms', formData, {
           headers: { Authorization: `Bearer ${token}` }
         });
       }
@@ -81,7 +81,7 @@ const AdminRooms = () => {
     if (window.confirm('Are you sure you want to delete this room?')) {
       try {
         const token = localStorage.getItem('token');
-        await axios.delete(`https://backendmanage-7nxn.onrender.com/api/rooms/${id}`, {
+        await axios.delete(`https://backendmanage-2.onrender.com/api/rooms/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         fetchRooms();

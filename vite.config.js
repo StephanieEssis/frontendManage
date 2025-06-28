@@ -20,7 +20,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'https://backendmanage-7nxn.onrender.com',
+        target: 'https://backendmanage-2.onrender.com',
         changeOrigin: true,
         secure: false
       }
