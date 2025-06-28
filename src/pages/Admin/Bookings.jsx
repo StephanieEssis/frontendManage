@@ -13,7 +13,7 @@ const AdminBookings = () => {
   const fetchBookings = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('https://backendmanage-2.onrender.com/api/admin/bookings', {
+      const response = await axios.get('https://backendmanage-3.onrender.com/api/admin/bookings', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setBookings(response.data);
@@ -29,7 +29,7 @@ const AdminBookings = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.put(
-        `https://backendmanage-2.onrender.com/api/admin/bookings/${id}/status`,
+        `https://backendmanage-3.onrender.com/api/admin/bookings/${id}/status`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );

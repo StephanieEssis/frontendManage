@@ -14,7 +14,7 @@ const AdminUsers = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await axios.get('https://backendmanage-2.onrender.com/api/admin/users', {
+      const response = await axios.get('https://backendmanage-3.onrender.com/api/admin/users', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsers(response.data);
@@ -30,7 +30,7 @@ const AdminUsers = () => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
         const token = localStorage.getItem('token');
-        await axios.delete(`https://backendmanage-2.onrender.com/api/admin/users/${id}`, {
+        await axios.delete(`https://backendmanage-3.onrender.com/api/admin/users/${id}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         fetchUsers();
